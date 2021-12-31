@@ -6,9 +6,4 @@
         android:icon="@drawable/ic_cross"
         app:showAsAction="always"
         android:contentDescription="Cancel"/>
-    <item android:id="@+id/deletePlant"
-        android:title="Delete Plant"
-        android:icon="@drawable/ic_delete"
-        app:showAsAction="always"
-        android:contentDescription="Cancel"/>
 </menu>

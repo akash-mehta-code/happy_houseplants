@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/editPlantLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditPlantActivity">
+    tools:context=".EditPlantActivity"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+        android:id="@+id/bottomAppBarEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:fabAlignmentMode="end"
         app:fabCradleRoundedCornerRadius="10dp"
-        app:menu="@menu/edit_plant_bottom_nav_menu"
-        app:fabAlignmentMode="end"/>
+        app:menu="@menu/edit_plant_bottom_nav_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveEdits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/saveEdits"
+        android:contentDescription="Save Plant"
         android:src="@drawable/ic_done"
-        app:layout_anchor="@id/bottomAppBar" />
+        app:layout_anchor="@id/bottomAppBarEdit"
+        android:focusable="false"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/plantNameLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
+        app:helperText="Required*"
+        app:helperTextTextColor="@color/red">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Plant Name"
+            android:inputType="text"
+            android:maxLength="50"
+            android:id="@+id/plantNameEditText" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

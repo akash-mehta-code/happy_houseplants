@@ -4,28 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ViewPlantActivity">
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBarMain"
+        android:id="@+id/bottomAppBarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:fabCradleRoundedCornerRadius="10dp"
-        app:menu="@menu/main_bottom_nav_menu"
-        app:navigationIcon="@drawable/ic_menu" />
+        app:menu="@menu/view_plant_bottom_nav_menu"
+        app:fabAlignmentMode="end"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addPlant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Add New Plant"
-        android:src="@drawable/ic_add"
-        app:layout_anchor="@id/bottomAppBarMain" />
+        android:id="@+id/saveEdits"
+        android:src="@drawable/ic_water"
+        app:layout_anchor="@id/bottomAppBarView"
+        app:maxImageSize="32dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/plantListRecView"
+    <TextView
+        android:id="@+id/plantNameViewMode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

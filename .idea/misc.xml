@@ -7,10 +7,14 @@
         <entry key="..\:/Users/akash/AndroidStudioProjects/HappyHouseplants/app/src/main/res/drawable/ic_sort.xml" value="0.3770833333333333" />
         <entry key="..\:/Users/akash/AndroidStudioProjects/HappyHouseplants/app/src/main/res/layout/activity_main.xml" value="0.3609375" />
         <entry key="..\:/Users/akash/AndroidStudioProjects/HappyHouseplants/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3609375" />
-        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/layout/activity_edit_plant.xml" value="0.3237997957099081" />
-        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/layout/activity_main.xml" value="0.3237997957099081" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/drawable/ic_delete.xml" value="0.22138157894736843" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/layout/activity_edit_plant.xml" value="0.20855263157894738" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/layout/activity_main.xml" value="0.20597790773229369" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/layout/activity_view_plant.xml" value="0.20597790773229369" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/layout/plant_item.xml" value="0.20855263157894738" />
         <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3302083333333333" />
-        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/menu/edit_plant_bottom_nav_menu.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/menu/edit_plant_bottom_nav_menu.xml" value="0.20597790773229369" />
+        <entry key="..\:/Users/manoj/StudioProjects/happy_houseplants/app/src/main/res/menu/view_plant_bottom_nav_menu.xml" value="0.20597790773229369" />
       </map>
     </option>
   </component>

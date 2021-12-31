@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/backFromView"
+        android:title="Back"
+        android:icon="@drawable/ic_back"
+        app:showAsAction="always"
+        android:contentDescription="Go Back"/>
+    <item android:id="@+id/editPlant"
+        android:title="Edit Plant"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="always"
+        android:contentDescription="Edit Plant"/>
+    <item android:id="@+id/deletePlant"
+        android:title="Delete Plant"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="always"
+        android:contentDescription="Delete Plant"/>
+</menu>
