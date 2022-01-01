@@ -2,13 +2,16 @@ package com.akashcode.happyhouseplants.dal;
 
 import android.content.Context;
 
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import java.util.Objects;
 
-@Database(entities = {Plant.class}, version = 1)
+@Database(
+        entities = {Plant.class},
+        version = 1)
 public abstract class PlantDatabase extends RoomDatabase {
     public abstract PlantDao plantDao();
 

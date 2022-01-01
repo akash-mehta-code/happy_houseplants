@@ -16,8 +16,13 @@ import com.akashcode.happyhouseplants.dal.PlantDatabase;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Objects;
+
 public class ViewPlantActivity extends AppCompatActivity implements View.OnClickListener {
-    Plant plant;
+    private Plant plant;
+    private TextView plantDaysBetweenWateringView;
+    private View plantDaysBetweenWateringLayout;
+    private TextView plantNameView;
 
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -27,13 +32,6 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
                     displayPlant(plantName);
                 }});
 
-    private void displayPlant(String plantName) {
-        plant = PlantDatabase.getInstance(this).plantDao().getPlant(plantName);
-
-        TextView plantNameView = findViewById(R.id.plantNameViewMode);
-        plantNameView.setText(plant.getName());
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +40,11 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.backFromView).setOnClickListener(this::onClick);
         findViewById(R.id.deletePlant).setOnClickListener(this::onClick);
         findViewById(R.id.editPlant).setOnClickListener(this::onClick);
+
+        plantDaysBetweenWateringView = findViewById(R.id.plantDaysBetweenWateringViewMode);
+        plantDaysBetweenWateringLayout = findViewById(R.id.plantDaysBetweenWateringLayout);
+        plantNameView = findViewById(R.id.plantNameViewMode);
+
         String plantName = getIntent().getExtras().getString("plantName");
         displayPlant(plantName);
     }
@@ -83,5 +86,19 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
     private void deletePlant() {
         PlantDatabase.getInstance(this).plantDao().deletePlant(plant);
         finish();
+    }
+
+    private void displayPlant(String plantName) {
+        plant = PlantDatabase.getInstance(this).plantDao().getPlant(plantName);
+
+        plantNameView.setText(plant.getName());
+
+        Integer daysBetweenWatering = plant.getDaysBetweenWatering();
+        if (Objects.nonNull(daysBetweenWatering)) {
+            plantDaysBetweenWateringView.setText(daysBetweenWatering.toString());
+            plantDaysBetweenWateringLayout.setVisibility(View.VISIBLE);
+        } else {
+            plantDaysBetweenWateringLayout.setVisibility(View.INVISIBLE);
+        }
     }
 }

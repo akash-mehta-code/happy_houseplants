@@ -14,6 +14,9 @@ public class Plant {
     @ColumnInfo(name = "name")
     private String name;
 
+    @ColumnInfo(name = "daysBetweenWatering")
+    private Integer daysBetweenWatering = null;
+
     public Plant(@NonNull String name) {
         Objects.requireNonNull(name);
         this.name = name;
@@ -27,5 +30,13 @@ public class Plant {
     public void setName(@NonNull String name) {
         Objects.requireNonNull(name);
         this.name = name;
+    }
+
+    public Integer getDaysBetweenWatering() {
+        return daysBetweenWatering;
+    }
+
+    public void setDaysBetweenWatering(Integer daysBetweenWatering) {
+        this.daysBetweenWatering = daysBetweenWatering;
     }
 }

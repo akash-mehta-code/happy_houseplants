@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 public class EditPlantActivity extends AppCompatActivity implements View.OnClickListener {
     Plant plant;
     TextInputEditText plantNameEditText;
+    TextInputEditText plantDaysBetweenWateringEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.discardEdits).setOnClickListener(this::onClick);
         plantNameEditText = findViewById(R.id.plantNameEditText);
 
+        plantDaysBetweenWateringEditText = findViewById(R.id.plantDaysBetweenWateringEditText);
+
         Bundle extras = getIntent().getExtras();
         String plantName = Objects.isNull(extras)? null : extras.getString("plantName");
         if (!Objects.isNull(plantName)) {
@@ -46,6 +49,9 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
     private void setPlantValues(String plantName) {
         plant = PlantDatabase.getInstance(this).plantDao().getPlant(plantName);
         plantNameEditText.setText(plant.getName());
+        if (Objects.nonNull(plant.getDaysBetweenWatering())) {
+            plantDaysBetweenWateringEditText.setText(plant.getDaysBetweenWatering().toString());
+        }
     }
 
     @Override
@@ -97,7 +103,11 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
             return;
         }
 
+        String daysBetweenWatering = plantDaysBetweenWateringEditText.getText().toString();
         Plant plant = new Plant(plantName);
+        if (StringUtils.isNotBlank(daysBetweenWatering)) {
+            plant.setDaysBetweenWatering(Integer.parseInt(daysBetweenWatering));
+        }
         plantDb.plantDao().addPlant(plant);
         Intent resultIntent = new Intent();
         resultIntent.putExtra("plantName", plant.getName());
