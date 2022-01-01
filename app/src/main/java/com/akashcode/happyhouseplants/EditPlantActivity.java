@@ -16,6 +16,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
@@ -108,6 +111,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         if (StringUtils.isNotBlank(daysBetweenWatering)) {
             plant.setDaysBetweenWatering(Integer.parseInt(daysBetweenWatering));
         }
+        plant.setWateringDates(this.plant.getWateringDates());
         plantDb.plantDao().addPlant(plant);
         Intent resultIntent = new Intent();
         resultIntent.putExtra("plantName", plant.getName());

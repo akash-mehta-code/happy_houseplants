@@ -5,7 +5,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,15 +12,25 @@ import android.widget.TextView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
 import com.akashcode.happyhouseplants.dal.PlantDatabase;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class ViewPlantActivity extends AppCompatActivity implements View.OnClickListener {
     private Plant plant;
     private TextView plantDaysBetweenWateringView;
     private View plantDaysBetweenWateringLayout;
+    private TextView plantLastWateredDateView;
+    private View plantLastWateredDateLayout;
+    private View wateringHistoryButtonView;
     private TextView plantNameView;
 
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
@@ -37,13 +46,18 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_plant);
 
-        findViewById(R.id.backFromView).setOnClickListener(this::onClick);
-        findViewById(R.id.deletePlant).setOnClickListener(this::onClick);
-        findViewById(R.id.editPlant).setOnClickListener(this::onClick);
-
+        wateringHistoryButtonView = findViewById(R.id.wateringHistoryButton);
         plantDaysBetweenWateringView = findViewById(R.id.plantDaysBetweenWateringViewMode);
         plantDaysBetweenWateringLayout = findViewById(R.id.plantDaysBetweenWateringLayout);
+        plantLastWateredDateView = findViewById(R.id.plantLastWateredDateViewMode);
+        plantLastWateredDateLayout = findViewById(R.id.plantLastWateredDateLayout);
         plantNameView = findViewById(R.id.plantNameViewMode);
+
+        findViewById(R.id.backFromView).setOnClickListener(this);
+        findViewById(R.id.deletePlant).setOnClickListener(this);
+        findViewById(R.id.editPlant).setOnClickListener(this);
+        findViewById(R.id.waterPlant).setOnClickListener(this);
+        wateringHistoryButtonView.setOnClickListener(this);
 
         String plantName = getIntent().getExtras().getString("plantName");
         displayPlant(plantName);
@@ -61,9 +75,36 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
             case R.id.editPlant:
                 openEditPlantActivity();
                 break;
+            case R.id.waterPlant:
+                waterPlant(view);
+                break;
+            case R.id.wateringHistoryButton:
+                showAllWateringDates(view);
+                break;
             default:
                 break;
         }
+    }
+
+    private void showAllWateringDates(View view) {
+        Snackbar.make(view, "WateringHistory", BaseTransientBottomBar.LENGTH_SHORT).show();
+    }
+
+    private void waterPlant(View view) {
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+        MaterialDatePicker.Builder<Long> datePickerBuilder = MaterialDatePicker.Builder.datePicker();
+        datePickerBuilder.setTitleText("Select Watering Date");
+        datePickerBuilder.setSelection(today);
+        MaterialDatePicker<Long> datePicker = datePickerBuilder.build();
+        datePicker.show(getSupportFragmentManager(), "DATE PICKER");
+        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+            @Override
+            public void onPositiveButtonClick(Long selection) {
+                plant.addWateringDate(datePicker.getSelection().longValue());
+                PlantDatabase.getInstance(ViewPlantActivity.this).plantDao().updatePlant(plant);
+                displayPlant(plant.getName());
+            }
+        });
     }
 
     private void openEditPlantActivity() {
@@ -98,7 +139,17 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
             plantDaysBetweenWateringView.setText(daysBetweenWatering.toString());
             plantDaysBetweenWateringLayout.setVisibility(View.VISIBLE);
         } else {
-            plantDaysBetweenWateringLayout.setVisibility(View.INVISIBLE);
+            plantDaysBetweenWateringLayout.setVisibility(View.GONE);
+        }
+
+        DateFormat simple = new SimpleDateFormat("dd MMM yyyy");
+        List<Long> wateringDates = plant.getWateringDates();
+        if (wateringDates.isEmpty()) {
+            plantLastWateredDateLayout.setVisibility(View.GONE);
+        } else {
+            String lastWateredDate = simple.format(new Date(wateringDates.get(wateringDates.size()-1)));
+            plantLastWateredDateView.setText(lastWateredDate);
+            plantLastWateredDateLayout.setVisibility(View.VISIBLE);
         }
     }
 }

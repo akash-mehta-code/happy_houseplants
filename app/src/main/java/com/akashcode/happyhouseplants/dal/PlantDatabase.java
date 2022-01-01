@@ -6,12 +6,15 @@ import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import java.util.Objects;
 
 @Database(
         entities = {Plant.class},
         version = 1)
+@TypeConverters(Plant.DatesTypeConverter.class)
 public abstract class PlantDatabase extends RoomDatabase {
     public abstract PlantDao plantDao();
 

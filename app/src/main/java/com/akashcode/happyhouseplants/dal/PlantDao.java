@@ -21,4 +21,7 @@ public interface PlantDao {
 
     @Query("SELECT * FROM plant WHERE name = :plantName")
     Plant getPlant(String plantName);
+
+    @Update
+    void updatePlant(Plant plant);
 }
