@@ -20,14 +20,11 @@ import com.akashcode.happyhouseplants.dal.Plant;
 import com.akashcode.happyhouseplants.dal.PlantDatabase;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private FloatingActionButton fab;
+public class MainActivity extends AppCompatActivity {
     private MaterialToolbar materialToolbar;
     private PlantListAdapter plantListAdapter;
     private PlantListAdapter.PlantListOnClickListener plantListOnClickListener;
@@ -45,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         materialToolbar = findViewById(R.id.materialToolBarMain);
         setSupportActionBar(materialToolbar);
 
-        fab = findViewById(R.id.addPlant);
-        fab.setOnClickListener(this::onClick);
         plantListOnClickListener = (view, position) -> openViewPlantActivity(position);
         plantListAdapter = new PlantListAdapter(this, plantListOnClickListener);
         initRecyclerView();
@@ -59,17 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b.putString("plantName", plantList.get(position).getName());
         intent.putExtras(b);
         someActivityResultLauncher.launch(intent);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.addPlant:
-                openEditPlantActivity();
-                break;
-            default:
-                break;
-        }
     }
 
     private void openEditPlantActivity() {
@@ -118,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_bottom_nav_menu, menu);
+        inflater.inflate(R.menu.main_activity_toolbar_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -132,6 +116,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 plantListAdapter.getFilter().filter(s);
                 return false;
             }
+        });
+
+        MenuItem addPlantItem = menu.findItem(R.id.addPlant);
+        addPlantItem.setOnMenuItemClickListener(menuItem -> {
+            openEditPlantActivity();
+            return true;
         });
         return true;
     }

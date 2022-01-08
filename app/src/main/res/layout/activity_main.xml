@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             app:fabCradleRoundedCornerRadius="10dp"
-            app:menu="@menu/main_bottom_nav_menu"
+            app:menu="@menu/main_activity_toolbar_menu"
             app:title="Plants"/>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -25,14 +25,5 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:paddingBottom="5dp"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addPlant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Add New Plant"
-        android:src="@drawable/ic_add"
-        android:layout_margin="25dp"
-        android:layout_gravity="bottom|right"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
