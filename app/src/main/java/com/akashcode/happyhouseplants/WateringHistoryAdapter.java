@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class WateringHistoryAdapter extends RecyclerView.Adapter<WateringHistoryAdapter.MyViewHolder>{
     private Context context;
@@ -34,6 +35,7 @@ public class WateringHistoryAdapter extends RecyclerView.Adapter<WateringHistory
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DateFormat simple = new SimpleDateFormat("dd MMM yyyy");
+        simple.setTimeZone(TimeZone.getTimeZone("UTC"));
         String wateringDate = simple.format(new Date(wateringHistory.get(position)));
         holder.wateringHistoryItem.setText(wateringDate);
     }

@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class ViewPlantActivity extends AppCompatActivity implements View.OnClickListener {
     private Plant plant;
@@ -108,12 +109,16 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
                 Snackbar.make(view, "Cannot select a future water date.", Snackbar.LENGTH_SHORT).show();
                 return;
             }
-            plant.addWateringDate(pickedDate);
             List<Long> wateringDates = plant.getWateringDates();
+            if (wateringDates.contains(pickedDate)) {
+                return;
+            }
+            plant.addWateringDate(pickedDate);
+            wateringDates = plant.getWateringDates();
             if (wateringDates.size() > 1) {
                 Long timeBetweenWatering = wateringDates.get(wateringDates.size()-1) - wateringDates.get(wateringDates.size()-2);
                 Long daysBetweenWatering = Duration.ofMillis(timeBetweenWatering).toDays();
-                if (Objects.isNull(plant.getDaysBetweenWatering())) {
+                if (Objects.isNull(plant.getDaysBetweenWatering()) || plant.getDaysBetweenWatering().equals(0)) {
 
                     plant.setDaysBetweenWatering(daysBetweenWatering);
                 } else if (!daysBetweenWatering.equals(plant.getDaysBetweenWatering())) {
@@ -177,6 +182,7 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         }
 
         DateFormat simple = new SimpleDateFormat("dd MMM yyyy");
+        simple.setTimeZone(TimeZone.getTimeZone("UTC"));
         List<Long> wateringDates = plant.getWateringDates();
         if (wateringDates.isEmpty()) {
             plantLastWateredDateLayout.setVisibility(View.GONE);

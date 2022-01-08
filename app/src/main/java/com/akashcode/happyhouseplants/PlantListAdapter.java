@@ -1,12 +1,15 @@
 package com.akashcode.happyhouseplants;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
@@ -59,9 +62,16 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyVi
                 progress = 0;
             }
             daysUntilNextWatering = daysBetweenWatering - daysSinceLastWatering;
+            if (daysUntilNextWatering < 0) {
+                daysUntilNextWatering = 0;
+            }
         }
         holder.waterProgressIndicator.setProgressCompat(((int) progress), false);
         holder.daysUntilNextWatering.setText(String.valueOf(daysUntilNextWatering));
+        if (daysUntilNextWatering == 0) {
+            holder.daysUntilNextWatering.setTextColor(ContextCompat.getColor(this.context, R.color.red));
+            holder.daysUntilNextWatering.setTypeface(Typeface.DEFAULT_BOLD);
+        }
     }
 
     @Override
