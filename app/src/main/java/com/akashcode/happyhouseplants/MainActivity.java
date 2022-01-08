@@ -1,34 +1,38 @@
 package com.akashcode.happyhouseplants;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import androidx.appcompat.widget.SearchView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
 import com.akashcode.happyhouseplants.dal.PlantDatabase;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private FloatingActionButton fab;
+    private MaterialToolbar materialToolbar;
     private PlantListAdapter plantListAdapter;
     private PlantListAdapter.PlantListOnClickListener plantListOnClickListener;
     private List<Plant> plantList;
-
+    private
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> loadPlants());
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        materialToolbar = findViewById(R.id.materialToolBarMain);
+        setSupportActionBar(materialToolbar);
 
         fab = findViewById(R.id.addPlant);
         fab.setOnClickListener(this::onClick);
@@ -105,10 +112,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initRecyclerView() {
         RecyclerView recView = findViewById(R.id.plantListRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));
-        //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        //recView.addItemDecoration(dividerItemDecoration);
         recView.setAdapter(plantListAdapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_bottom_nav_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
+                plantListAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+        return true;
+    }
 }

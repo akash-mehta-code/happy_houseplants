@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -13,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
+import com.akashcode.happyhouseplants.dal.PlantDatabase;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
@@ -23,10 +26,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyViewHolder> {
+public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyViewHolder> implements Filterable {
     private Context context;
     private List<Plant> plantList = new ArrayList<>();
     private PlantListOnClickListener plantListOnClickListener;
+    private Filter plantFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Plant> plantList = PlantDatabase.getInstance(context).plantDao().searchPlants("%"+charSequence.toString().toLowerCase()+"%");
+            FilterResults result = new FilterResults();
+            result.values = plantList;
+            return result;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            plantList.clear();
+            plantList.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public PlantListAdapter(Context context, PlantListOnClickListener listener) {
         this.context = context;
@@ -77,6 +96,11 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyVi
     @Override
     public int getItemCount() {
         return plantList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return plantFilter;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

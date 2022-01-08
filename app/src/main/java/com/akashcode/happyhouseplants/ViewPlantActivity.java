@@ -106,7 +106,7 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         datePicker.addOnPositiveButtonClickListener(selection -> {
             long pickedDate = datePicker.getSelection().longValue();
             if (pickedDate > today) {
-                Snackbar.make(view, "Cannot select a future water date.", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, "Cannot select a future water date.", Snackbar.LENGTH_SHORT).setAnchorView(R.id.waterPlant).show();
                 return;
             }
             List<Long> wateringDates = plant.getWateringDates();

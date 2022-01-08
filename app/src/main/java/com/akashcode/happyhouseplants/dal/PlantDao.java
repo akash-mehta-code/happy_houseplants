@@ -13,6 +13,9 @@ public interface PlantDao {
     @Query("SELECT * FROM plant")
     List<Plant> listPlants();
 
+    @Query("SELECT * FROM plant WHERE LOWER(name) LIKE :searchQuery")
+    List<Plant> searchPlants(String searchQuery);
+
     @Insert
     void addPlant(Plant plant);
 
