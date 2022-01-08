@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HappyHouseplants">
         <activity
+            android:name=".WateringHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewPlantActivity"
             android:exported="false" />
         <activity

@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initRecyclerView() {
         RecyclerView recView = findViewById(R.id.plantListRecView);
         recView.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recView.addItemDecoration(dividerItemDecoration);
+        //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        //recView.addItemDecoration(dividerItemDecoration);
         recView.setAdapter(plantListAdapter);
     }
 }

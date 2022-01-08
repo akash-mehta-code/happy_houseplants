@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -87,7 +88,11 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void showAllWateringDates(View view) {
-        Snackbar.make(view, "WateringHistory", BaseTransientBottomBar.LENGTH_SHORT).show();
+        Intent intent = new Intent(ViewPlantActivity.this, WateringHistoryActivity.class);
+        Bundle b = new Bundle();
+        b.putString("plantName", plant.getName());
+        intent.putExtras(b);
+        someActivityResultLauncher.launch(intent);
     }
 
     private void waterPlant(View view) {
@@ -97,14 +102,43 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         datePickerBuilder.setSelection(today);
         MaterialDatePicker<Long> datePicker = datePickerBuilder.build();
         datePicker.show(getSupportFragmentManager(), "DATE PICKER");
-        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
-            @Override
-            public void onPositiveButtonClick(Long selection) {
-                plant.addWateringDate(datePicker.getSelection().longValue());
-                PlantDatabase.getInstance(ViewPlantActivity.this).plantDao().updatePlant(plant);
-                displayPlant(plant.getName());
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            long pickedDate = datePicker.getSelection().longValue();
+            if (pickedDate > today) {
+                Snackbar.make(view, "Cannot select a future water date.", Snackbar.LENGTH_SHORT).show();
+                return;
             }
+            plant.addWateringDate(pickedDate);
+            List<Long> wateringDates = plant.getWateringDates();
+            if (wateringDates.size() > 1) {
+                Long timeBetweenWatering = wateringDates.get(wateringDates.size()-1) - wateringDates.get(wateringDates.size()-2);
+                Long daysBetweenWatering = Duration.ofMillis(timeBetweenWatering).toDays();
+                if (Objects.isNull(plant.getDaysBetweenWatering())) {
+
+                    plant.setDaysBetweenWatering(daysBetweenWatering);
+                } else if (!daysBetweenWatering.equals(plant.getDaysBetweenWatering())) {
+                    updateDaysBetweenWateringDialog(plant.getDaysBetweenWatering(), daysBetweenWatering);
+                }
+            }
+            PlantDatabase.getInstance(ViewPlantActivity.this).plantDao().updatePlant(plant);
+            displayPlant(plant.getName());
         });
+    }
+
+    private void updateDaysBetweenWateringDialog(Long currentDaysBetweenWatering, Long newDaysBetweenWatering) {
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(ViewPlantActivity.this);
+        dialogBuilder.setTitle("Update Days Between Watering?");
+        dialogBuilder.setMessage(
+                String.format("Days between watering is set to %d. Most recent watering is done after %d days. " +
+                        "Do you want to update Days Between Watering to %d?", currentDaysBetweenWatering, newDaysBetweenWatering, newDaysBetweenWatering));
+        dialogBuilder.setPositiveButton("YES", (dialogInterface, i) -> {
+            plant.setDaysBetweenWatering(newDaysBetweenWatering);
+
+            PlantDatabase.getInstance(ViewPlantActivity.this).plantDao().updatePlant(plant);
+            displayPlant(plant.getName());
+        });
+        dialogBuilder.setNegativeButton("NO", (dialogInterface, i) -> { });
+        dialogBuilder.show();
     }
 
     private void openEditPlantActivity() {
@@ -134,7 +168,7 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
 
         plantNameView.setText(plant.getName());
 
-        Integer daysBetweenWatering = plant.getDaysBetweenWatering();
+        Long daysBetweenWatering = plant.getDaysBetweenWatering();
         if (Objects.nonNull(daysBetweenWatering)) {
             plantDaysBetweenWateringView.setText(daysBetweenWatering.toString());
             plantDaysBetweenWateringLayout.setVisibility(View.VISIBLE);
@@ -146,10 +180,12 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         List<Long> wateringDates = plant.getWateringDates();
         if (wateringDates.isEmpty()) {
             plantLastWateredDateLayout.setVisibility(View.GONE);
+            wateringHistoryButtonView.setVisibility(View.GONE);
         } else {
             String lastWateredDate = simple.format(new Date(wateringDates.get(wateringDates.size()-1)));
             plantLastWateredDateView.setText(lastWateredDate);
             plantLastWateredDateLayout.setVisibility(View.VISIBLE);
+            wateringHistoryButtonView.setVisibility(View.VISIBLE);
         }
     }
 }

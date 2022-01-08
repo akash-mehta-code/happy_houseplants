@@ -23,8 +23,9 @@ public class Plant {
     private String name;
 
     @ColumnInfo(name = "daysBetweenWatering")
-    private Integer daysBetweenWatering = null;
+    private Long daysBetweenWatering = null;
 
+    // Dates are stored in milisecond timestamps
     @ColumnInfo(name = "wateringDates")
     private List<Long> wateringDates = new ArrayList<>();
 
@@ -43,11 +44,11 @@ public class Plant {
         this.name = name;
     }
 
-    public Integer getDaysBetweenWatering() {
+    public Long getDaysBetweenWatering() {
         return daysBetweenWatering;
     }
 
-    public void setDaysBetweenWatering(Integer daysBetweenWatering) {
+    public void setDaysBetweenWatering(Long daysBetweenWatering) {
         this.daysBetweenWatering = daysBetweenWatering;
     }
 

@@ -96,8 +96,10 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
     private void savePlant() {
         PlantDatabase plantDb = PlantDatabase.getInstance(this.getApplicationContext());
 
+        List<Long> wateringDates = new ArrayList<>();
         if (!Objects.isNull(this.plant)) {
             plantDb.plantDao().deletePlant(this.plant);
+            wateringDates = this.plant.getWateringDates();
         }
 
         String plantName = plantNameEditText.getText().toString();
@@ -109,9 +111,9 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         String daysBetweenWatering = plantDaysBetweenWateringEditText.getText().toString();
         Plant plant = new Plant(plantName);
         if (StringUtils.isNotBlank(daysBetweenWatering)) {
-            plant.setDaysBetweenWatering(Integer.parseInt(daysBetweenWatering));
+            plant.setDaysBetweenWatering(Long.parseLong(daysBetweenWatering));
         }
-        plant.setWateringDates(this.plant.getWateringDates());
+        plant.setWateringDates(wateringDates);
         plantDb.plantDao().addPlant(plant);
         Intent resultIntent = new Intent();
         resultIntent.putExtra("plantName", plant.getName());

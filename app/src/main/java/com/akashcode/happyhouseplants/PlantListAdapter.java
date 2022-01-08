@@ -10,9 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import org.w3c.dom.Text;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +45,23 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.plantListItem.setText(plantList.get(position).getName());
+        Plant plant = plantList.get(position);
+        holder.plantListItem.setText(plant.getName());
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+        long progress = 0;
+        long daysUntilNextWatering = 0;
+        Long daysBetweenWatering = plant.getDaysBetweenWatering();
+        List<Long> wateringDates = plant.getWateringDates();
+        if (!wateringDates.isEmpty() && Objects.nonNull(daysBetweenWatering)) {
+            Long daysSinceLastWatering = Duration.ofMillis(today - wateringDates.get(wateringDates.size()-1)).toDays();
+            progress = 100 - 100*daysSinceLastWatering/ daysBetweenWatering;
+            if (progress < 0) {
+                progress = 0;
+            }
+            daysUntilNextWatering = daysBetweenWatering - daysSinceLastWatering;
+        }
+        holder.waterProgressIndicator.setProgressCompat(((int) progress), false);
+        holder.daysUntilNextWatering.setText(String.valueOf(daysUntilNextWatering));
     }
 
     @Override
@@ -52,10 +71,15 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView plantListItem;
+        LinearProgressIndicator waterProgressIndicator;
+        TextView daysUntilNextWatering;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             plantListItem = itemView.findViewById(R.id.plantListItemNameTextView);
+            waterProgressIndicator = itemView.findViewById(R.id.waterProgressBar);
+            daysUntilNextWatering = itemView.findViewById(R.id.daysUntilNextWateringValue);
+
             itemView.setOnClickListener(this);
         }
 
