@@ -13,10 +13,11 @@
             android:id="@+id/materialToolBarMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            app:fabCradleRoundedCornerRadius="10dp"
             app:menu="@menu/main_activity_toolbar_menu"
-            app:title="Plants"/>
+            app:title="Happy Houseplants"
+            android:background="@color/teal_700"
+            app:titleTextColor="@color/white"
+            android:theme="@style/Theme.SearchBar"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -6,14 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".ViewPlantActivity">
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBarView"
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:fabCradleRoundedCornerRadius="10dp"
-        app:menu="@menu/view_plant_bottom_nav_menu"
-        app:fabAlignmentMode="end"/>
+        android:id="@+id/viewPlantAppBarLayout">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/viewPlantToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/view_plant_bottom_nav_menu"
+            android:background="@color/teal_700"
+            app:titleTextColor="@color/white"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/plantDaysBetweenWateringLayout"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Days Between Watering:"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/plantDaysBetweenWateringViewMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7"
+                    android:textSize="15sp"
+                    android:layout_margin="15dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/plantDaysBetweenWateringLayout"
+                android:id="@+id/plantLastWateredDateLayout"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Last Watered Date:"
+                    android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/plantLastWateredDateViewMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:layout_margin="15dp"/>
+            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All Watering Dates"
+                android:layout_below="@id/plantLastWateredDateLayout"
+                android:id="@+id/wateringHistoryButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:paddingLeft="15dp"
+                app:textAllCaps="false"
+                android:textColor="@color/teal_200"
+                />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -21,75 +92,8 @@
         android:id="@+id/waterPlant"
         android:contentDescription="Water plant"
         android:src="@drawable/ic_water"
-        app:layout_anchor="@id/bottomAppBarView"
-        app:maxImageSize="32dp"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/plantNameViewMode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="Plant Name"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/plantNameViewMode"
-            android:id="@+id/plantDaysBetweenWateringLayout"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:text="Days Between Watering:"
-                android:textSize="15sp" />
-            <TextView
-                android:id="@+id/plantDaysBetweenWateringViewMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="7"
-                android:textSize="15sp"
-                android:layout_margin="15dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/plantDaysBetweenWateringLayout"
-            android:id="@+id/plantLastWateredDateLayout"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:text="Last Watered Date:"
-                android:textSize="15sp" />
-            <TextView
-                android:id="@+id/plantLastWateredDateViewMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_margin="15dp"/>
-        </LinearLayout>
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View All Watering Dates"
-            android:layout_below="@id/plantLastWateredDateLayout"
-            android:id="@+id/wateringHistoryButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:paddingLeft="15dp"
-            app:textAllCaps="false"
-            />
-
-    </RelativeLayout>
+        app:maxImageSize="32dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="25dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

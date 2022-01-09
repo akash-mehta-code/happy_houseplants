@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
 import com.akashcode.happyhouseplants.dal.PlantDatabase;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -33,7 +34,7 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
     private TextView plantLastWateredDateView;
     private View plantLastWateredDateLayout;
     private View wateringHistoryButtonView;
-    private TextView plantNameView;
+    private MaterialToolbar viewPlantToolBar;
 
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -53,7 +54,7 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
         plantDaysBetweenWateringLayout = findViewById(R.id.plantDaysBetweenWateringLayout);
         plantLastWateredDateView = findViewById(R.id.plantLastWateredDateViewMode);
         plantLastWateredDateLayout = findViewById(R.id.plantLastWateredDateLayout);
-        plantNameView = findViewById(R.id.plantNameViewMode);
+        viewPlantToolBar = findViewById(R.id.viewPlantToolBar);
 
         findViewById(R.id.backFromView).setOnClickListener(this);
         findViewById(R.id.deletePlant).setOnClickListener(this);
@@ -171,7 +172,7 @@ public class ViewPlantActivity extends AppCompatActivity implements View.OnClick
     private void displayPlant(String plantName) {
         plant = PlantDatabase.getInstance(this).plantDao().getPlant(plantName);
 
-        plantNameView.setText(plant.getName());
+        viewPlantToolBar.setTitle(plant.getName());
 
         Long daysBetweenWatering = plant.getDaysBetweenWatering();
         if (Objects.nonNull(daysBetweenWatering)) {

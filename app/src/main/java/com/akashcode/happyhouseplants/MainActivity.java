@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +22,11 @@ import com.akashcode.happyhouseplants.dal.PlantDatabase;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class MainActivity extends AppCompatActivity {
     private MaterialToolbar materialToolbar;
@@ -32,7 +36,22 @@ public class MainActivity extends AppCompatActivity {
     private
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -> loadPlants());
+            result -> {
+                loadPlants();
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    String plantName = result.getData().getStringExtra("plantName");
+                    if (StringUtils.isNotBlank(plantName)) {
+                        int index = IntStream.range(0, plantList.size())
+                                .filter(i -> plantList.get(i).getName().equals(plantName))
+                                .findFirst()
+                                .orElse(-1);
+                        if (index != -1) {
+
+                            openViewPlantActivity(index);
+                        }
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         sortPlants(plantList);
         plantListAdapter.setPlantList(plantList);
         plantListAdapter.notifyDataSetChanged();
+        materialToolbar.setTitle(String.format("Happy Houseplants (%d)", plantList.size()));
     }
 
     private void sortPlants(List<Plant> plantList) {

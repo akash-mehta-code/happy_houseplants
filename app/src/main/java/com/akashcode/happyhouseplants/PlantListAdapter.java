@@ -90,6 +90,9 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyVi
         if (daysUntilNextWatering == 0) {
             holder.daysUntilNextWatering.setTextColor(ContextCompat.getColor(this.context, R.color.red));
             holder.daysUntilNextWatering.setTypeface(Typeface.DEFAULT_BOLD);
+        } else {
+            holder.daysUntilNextWatering.setTextColor(ContextCompat.getColor(this.context, R.color.white));
+            holder.daysUntilNextWatering.setTypeface(Typeface.DEFAULT);
         }
     }
 

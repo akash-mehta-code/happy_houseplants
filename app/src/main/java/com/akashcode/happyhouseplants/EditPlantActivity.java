@@ -66,7 +66,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.saveEdits:
-                saveEditsDialog();
+                saveEditsDialog(view);
                 break;
             case R.id.discardEdits:
                 discardEdits();
@@ -85,7 +85,7 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         dialogBuilder.show();
     }
 
-    private void saveEditsDialog() {
+    private void saveEditsDialog(View view) {
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(EditPlantActivity.this);
         dialogBuilder.setTitle("Save Plant?");
         dialogBuilder.setPositiveButton("SAVE", (dialogInterface, i) -> savePlant());
@@ -106,12 +106,21 @@ public class EditPlantActivity extends AppCompatActivity implements View.OnClick
         if (StringUtils.isBlank(plantName)) {
             Snackbar.make(plantNameEditText, "Plant Name cannot be empty.", BaseTransientBottomBar.LENGTH_SHORT).setAnchorView(R.id.saveEdits).show();
             return;
+        } else if (Objects.nonNull(plantDb.plantDao().getPlant(plantName))) {
+            Snackbar.make(plantNameEditText, String.format("Another plant with name '%s' already exists.", plantName), BaseTransientBottomBar.LENGTH_SHORT).setAnchorView(R.id.saveEdits).show();
+            return;
         }
 
         String daysBetweenWatering = plantDaysBetweenWateringEditText.getText().toString();
         Plant plant = new Plant(plantName);
         if (StringUtils.isNotBlank(daysBetweenWatering)) {
-            plant.setDaysBetweenWatering(Long.parseLong(daysBetweenWatering));
+            long daysBetweenWateringValue = Long.parseLong(daysBetweenWatering);
+            if (daysBetweenWateringValue == 0) {
+                Snackbar.make(plantDaysBetweenWateringEditText, "Days Between Watering Cannot be 0.",
+                        Snackbar.LENGTH_SHORT).setAnchorView(R.id.saveEdits).show();
+                return;
+            }
+            plant.setDaysBetweenWatering(daysBetweenWateringValue);
         }
         plant.setWateringDates(wateringDates);
         plantDb.plantDao().addPlant(plant);
