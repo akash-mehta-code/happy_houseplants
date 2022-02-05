@@ -1,6 +1,8 @@
 package com.akashcode.happyhouseplants;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
 import com.akashcode.happyhouseplants.dal.PlantDatabase;
+import com.akashcode.happyhouseplants.dal.PlantHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
@@ -35,6 +38,10 @@ public class PlantListAdapter extends RecyclerView.Adapter<PlantListAdapter.MyVi
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Plant> plantList = PlantDatabase.getInstance(context).plantDao().searchPlants("%"+charSequence.toString().toLowerCase()+"%");
             FilterResults result = new FilterResults();
+            SharedPreferences sharedPref = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
+            PlantHelper.SortType sortType = PlantHelper.SortType.valueOf(sharedPref.getString("sortType", PlantHelper.SortType.DAYS_UNTIL_NEXT_WATERING.name()));
+            PlantHelper.sortPlants(plantList, sortType);
+
             result.values = plantList;
             return result;
         }

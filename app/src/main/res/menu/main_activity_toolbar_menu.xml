@@ -8,7 +8,7 @@
         android:contentDescription="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
     <item android:id="@+id/addPlant"
-        android:title="Search"
+        android:title="Add Plant"
         android:icon="@drawable/ic_add"
         app:showAsAction="always"
         android:contentDescription="Add Plant" />

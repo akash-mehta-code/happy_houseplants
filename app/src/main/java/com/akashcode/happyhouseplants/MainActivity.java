@@ -19,6 +19,7 @@ import androidx.appcompat.widget.SearchView;
 
 import com.akashcode.happyhouseplants.dal.Plant;
 import com.akashcode.happyhouseplants.dal.PlantDatabase;
+import com.akashcode.happyhouseplants.dal.PlantHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -83,34 +84,12 @@ public class MainActivity extends AppCompatActivity {
     private void loadPlants() {
         PlantDatabase plantDb = PlantDatabase.getInstance(this.getApplicationContext());
         plantList = plantDb.plantDao().listPlants();
-        sortPlants(plantList);
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        PlantHelper.SortType sortType = PlantHelper.SortType.valueOf(sharedPref.getString("sortType", PlantHelper.SortType.DAYS_UNTIL_NEXT_WATERING.name()));
+        PlantHelper.sortPlants(plantList, sortType);
         plantListAdapter.setPlantList(plantList);
         plantListAdapter.notifyDataSetChanged();
         materialToolbar.setTitle(String.format("Happy Houseplants (%d)", plantList.size()));
-    }
-
-    private void sortPlants(List<Plant> plantList) {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SortType sortType = SortType.valueOf(sharedPref.getString("sortType", SortType.DAYS_UNTIL_NEXT_WATERING.name()));
-        switch (sortType) {
-            case PLANT_NAME:
-                Collections.sort(plantList, new Plant.SortByName());
-                break;
-            case WATER_LEVEL:
-                Collections.sort(plantList, new Plant.SortByWaterLevel());
-                break;
-            case DAYS_UNTIL_NEXT_WATERING:
-                Collections.sort(plantList, new Plant.SortByDaysUntilNextWatering());
-                break;
-            default:
-                return;
-        }
-    }
-
-    private enum SortType {
-        PLANT_NAME,
-        DAYS_UNTIL_NEXT_WATERING,
-        WATER_LEVEL
     }
 
     private void initRecyclerView() {
